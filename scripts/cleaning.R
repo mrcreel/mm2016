@@ -17,16 +17,19 @@ func_season <- function(season = 1985){
   dfx$Wloc <- as.character(dfx$Wloc)
   
   temp <- dfx %>%
-    dplyr::mutate(team1 = ifelse(Wteam < Lteam, Wteam, Lteam),
-                  team2 = ifelse(Wteam < Lteam, Lteam, Wteam),
+    dplyr::mutate(team1 = as.factor(ifelse(Wteam < Lteam, Wteam, Lteam)),
+                  team2 = as.factor(ifelse(Wteam < Lteam, Lteam, Wteam)),
                   team1pts = ifelse(Wteam < Lteam, Wscore, Lscore),
                   team2pts = ifelse(Wteam < Lteam, Lscore, Wscore),
                   result = ifelse(Wteam < Lteam, 1, 0),
-                  team1loc = ifelse(result == 1, Wloc, ""),
-                  team1loc = ifelse(result == "", "X", team1loc)
+                  team1loc = Wloc ,
+                  team1loc = ifelse(result == 0 & Wloc == "H", "A", 
+                                    ifelse(result == 0 & Wloc == "A",
+                                           "H", team1loc))
             ) %>%
     dplyr::select(season = Season, daynum = Daynum, 
-                 team1, team1pts, team2, team2pts, result, Wloc, team1loc, Numot)
+                 team1, team1pts, team2, team2pts, result, team1loc, Numot) %>%
+    as.data.frame()
     
   return(temp)
 }
