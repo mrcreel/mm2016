@@ -42,8 +42,9 @@ season.games <- function(season = 1985){
             ) %>%
     dplyr::select(season = Season, daynum = Daynum, 
                  team1, team1.pts, team2, team2.pts, result, team1.loc, Numot,
-                 team1.fgm, team2.fgm, team1.fga, team2.fga, team1.fgm3, team2.fgm3,
-                 team1.fga3, team2.fga3, team1.ftm, team2.ftm, team1.fta, team2.fta
+                 team1.fgm, team2.fgm, team1.fga, team2.fga, 
+                 team1.fgm3, team2.fgm3, team1.fga3, team2.fga3, 
+                 team1.ftm, team2.ftm, team1.fta, team2.fta
                  ) %>%
     as.data.frame()
     
