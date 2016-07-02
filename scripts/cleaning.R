@@ -20,26 +20,30 @@ season.games <- function(season = 1985){
   temp <- dfx %>%
     dplyr::mutate(team1 = as.factor(ifelse(Wteam < Lteam, Wteam, Lteam)),
                   team2 = as.factor(ifelse(Wteam < Lteam, Lteam, Wteam)),
-                  team1pts = ifelse(Wteam < Lteam, Wscore, Lscore),
-                  team2pts = ifelse(Wteam < Lteam, Lscore, Wscore),
-                  team1fgm = ifelse(Wteam < Lteam, Wfgm, Lfgm),
-                  team2fgm = ifelse(Wteam < Lteam, Lfgm, Wfgm),
-                  team1fga = ifelse(Wteam < Lteam, Wfga, Lfga),
-                  team2fga = ifelse(Wteam < Lteam, Lfga, Wfga),
-                  team1fgm3 = ifelse(Wteam < Lteam, Wfgm3, Lfgm3),
-                  team2fgm3 = ifelse(Wteam < Lteam, Lfgm3, Wfgm3),
-                  team1fga3 = ifelse(Wteam < Lteam, Wfga3, Lfga3),
-                  team2fga3 = ifelse(Wteam < Lteam, Lfga3, Wfga3),
+                  team1.pts = ifelse(Wteam < Lteam, Wscore, Lscore),
+                  team2.pts = ifelse(Wteam < Lteam, Lscore, Wscore),
+                  team1.fgm = ifelse(Wteam < Lteam, Wfgm, Lfgm),
+                  team2.fgm = ifelse(Wteam < Lteam, Lfgm, Wfgm),
+                  team1.fga = ifelse(Wteam < Lteam, Wfga, Lfga),
+                  team2.fga = ifelse(Wteam < Lteam, Lfga, Wfga),
+                  team1.fgm3 = ifelse(Wteam < Lteam, Wfgm3, Lfgm3),
+                  team2.fgm3 = ifelse(Wteam < Lteam, Lfgm3, Wfgm3),
+                  team1.fga3 = ifelse(Wteam < Lteam, Wfga3, Lfga3),
+                  team2.fga3 = ifelse(Wteam < Lteam, Lfga3, Wfga3),
+                  team1.ftm = ifelse(Wteam < Lteam, Wftm, Lftm),
+                  team2.ftm = ifelse(Wteam < Lteam, Lftm, Wftm),
+                  team1.fta = ifelse(Wteam < Lteam, Wfta, Lfta),
+                  team2.fta = ifelse(Wteam < Lteam, Lfta, Wfta),
                   result = ifelse(Wteam < Lteam, 1, 0),
-                  team1loc = Wloc,
-                  team1loc = ifelse(result == 0 & Wloc == "H", "A", 
+                  team1.loc = Wloc,
+                  team1.loc = ifelse(result == 0 & Wloc == "H", "A", 
                                     ifelse(result == 0 & Wloc == "A",
                                            "H", team1loc))
             ) %>%
     dplyr::select(season = Season, daynum = Daynum, 
-                 team1, team1pts, team2, team2pts, result, team1loc, Numot,
-                 team1fgm, team2fgm, team1fga, team2fga, team1fgm3, team2fgm3,
-                 team1fga3, team2fga3
+                 team1, team1.pts, team2, team2.pts, result, team1.loc, Numot,
+                 team1.fgm, team2.fgm, team1.fga, team2.fga, team1.fgm3, team2.fgm3,
+                 team1.fga3, team2.fga3, team1.ftm, team2.ftm, team1.fta, team2.fta
                  ) %>%
     as.data.frame()
     
@@ -53,18 +57,22 @@ season.stats <- function(season = 1985){
   temp <- rbind(
     df %>%
       dplyr::select(season, team = team1, opp = team2, 
-                    pf = team1pts, pa = team2pts,
-                    fgmade = team1fgm, fgallowed = team2fgm,
-                    fgatt = team1fga, fgattall = team2fga,
-                    made3 = team1fgm3, all3 = team2fgm3,
-                    att3 = team1fga3, against3 = team2fga3),
+                    pf = team1.pts, pa = team2.pts,
+                    fgmade = team1.fgm, fgallowed = team2.fgm,
+                    fgatt = team1.fga, fgattall = team2.fga,
+                    made3 = team1.fgm3, all3 = team2.fgm3,
+                    att3 = team1.fga3, against3 = team2.fga3,
+                    ftmade = team1.ftm, ftallowed = team2.ftm,
+                    ftfor = team1.fta, ftagainst = team2.fta),
     df %>%
       dplyr::select(season, team = team2, opp = team1, 
-                    pf = team2pts, pa = team1pts,
-                    fgmade = team2fgm, fgallowed = team1fgm,
-                    fgatt = team2fga, fgattall = team1fga,
-                    made3 = team2fgm3, all3 = team1fgm3,
-                    att3 = team2fga3, against3 = team1fga3)
+                    pf = team2.pts, pa = team1.pts,
+                    fgmade = team2.fgm, fgallowed = team1.fgm,
+                    fgatt = team2.fga, fgattall = team1.fga,
+                    made3 = team2.fgm3, all3 = team1.fgm3,
+                    att3 = team2.fga3, against3 = team1.fga3,
+                    ftmade = team2.ftm, ftallowed = team1.ftm,
+                    ftfor = team2.fta, ftagainst = team1.fta)
   ) %>%
     dplyr::mutate(ptDiff = pf - pa) %>%
     dplyr::group_by(season, team) %>%
@@ -81,11 +89,18 @@ season.stats <- function(season = 1985){
       fgm3.for = sum(made3),
       fgm3.against = sum(all3),
       fga3.for = sum(att3),
-      fga3.against = sum(against3)
+      fga3.against = sum(against3),
+      ftm.for = sum(ftmade),
+      ftm.against = sum(ftallowed),
+      fta.for = sum(ftfor),
+      fta.against = sum(ftagainst)
     ) %>%
     ungroup() %>%
     as.data.frame()
   
   return(temp)
   
-  }
+}
+
+season <- season.stats(2015)
+games <- season.games(2015)
